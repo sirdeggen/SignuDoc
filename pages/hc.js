@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import {createRef, useEffect, useState} from 'react'
 import { fletcher } from '../lib/fletcher'
 
 export default function HCPage() {
@@ -8,9 +8,10 @@ export default function HCPage() {
     const [mostRecentResponse, setMostRecentResponse] = useState({})
 
     useEffect(() => {
-        const authToken = localStorage.getItem('HC_TOKEN')
+        const authToken = localStorage?.HC_TOKEN
+        console.log({ authToken })
         setHcToken(authToken)
-    }, [])
+    }, [router?.pathname])
 
     async function redirect() {
         try {
@@ -26,7 +27,7 @@ export default function HCPage() {
             const response = await fletcher(
                 '/api/payment',
                 {
-                    handle: 'jadwahab',
+                    handle: handle?.current?.value || 'jadwahab',
                     satoshis: 1000,
                 },
                 authToken
@@ -46,6 +47,8 @@ export default function HCPage() {
         }
     }
 
+    const handle = createRef()
+
     return (
         <>
             <h1>Handcash Connect - Workshop Examples</h1>
@@ -54,7 +57,7 @@ export default function HCPage() {
                     <button onClick={redirect}>Login</button>
                 </li>
                 <li>
-                    <button onClick={payment}>Pay Me</button>
+                    <input type={'text'} placeholder={'jadwahab'} ref={handle}/><button onClick={payment}>Pay Someone</button>
                 </li>
                 <li>
                     <button onClick={logout}>Logout</button>

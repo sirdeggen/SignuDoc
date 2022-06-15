@@ -1,14 +1,6 @@
 import Link from 'next/link'
-import { useUser } from '../lib/hooks'
 
 export default function Navbar() {
-    const [user, { mutate }] = useUser()
-
-    async function handleLogout() {
-        await fetch('/api/logout')
-        mutate({ user: null })
-    }
-
     return (
         <header>
             <nav>
@@ -18,17 +10,11 @@ export default function Navbar() {
                             <a>HandCash</a>
                         </Link>
                     </li>
-                    {user ? (
-                        <>
-                            <li>
-                                <Link href="/mb">
-                                    <a>MoneyButton</a>
-                                </Link>
-                            </li>
-                        </>
-                    ) : (
-                        <></>
-                    )}
+                    <li>
+                        <Link href="/mb">
+                            <a>MoneyButton</a>
+                        </Link>
+                    </li>
                 </ul>
             </nav>
             <style jsx>{`

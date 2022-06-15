@@ -5,11 +5,11 @@ export default function HCPage() {
     const router = useRouter()
 
     useEffect(() => {
-        const saveToken = async () => {
-            await localStorage.setItem('HC_TOKEN', router?.query?.authToken)
+        if (router?.query?.authToken) {
+            localStorage.setItem('HC_TOKEN', router?.query?.authToken)
+            router.push('/hc')
         }
-        saveToken().then(router.push('/hc'))
-    }, [])
+    }, [router?.query?.authToken])
 
     return (
         <>
