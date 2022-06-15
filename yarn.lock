@@ -223,7 +223,7 @@ bs58@4.0.1, bs58@=4.0.1:
   dependencies:
     base-x "^3.0.2"
 
-bsv@^1.5.4, bsv@^1.5.6:
+bsv@^1.5.3, bsv@^1.5.4, bsv@^1.5.6:
   version "1.5.6"
   resolved "https://registry.yarnpkg.com/bsv/-/bsv-1.5.6.tgz#4efa3cab2af531d7643ec7dc731222e2d989a73d"
   integrity sha512-A0g36x63lVF9Ia6/z/RjcxaQMHE5cLl2rDxjUIKz0UTMLf5bPPyLI9yVyY2JkecF77MrU+MQdKVt0MSdU5abtw==
@@ -341,6 +341,13 @@ dotenv@^8.0.0, dotenv@^8.1.0:
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.6.0.tgz#061af664d19f7f4d8fc6e4ff9b584ce237adcb8b"
   integrity sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==
+
+electrum-ecies@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/electrum-ecies/-/electrum-ecies-1.1.8.tgz#4ffdd4e0dcf01d6d833b58d805601991485e7dfe"
+  integrity sha512-xMevDX6K2sXjvrUDIWPsDgzGZ13e8kDN2dQ9tuwTDYr3eyDVg1qfioYevvkzGAxybLeZLyxBwd1phtNk7HU4tQ==
+  dependencies:
+    bsv "^1.5.3"
 
 elliptic@6.5.4:
   version "6.5.4"

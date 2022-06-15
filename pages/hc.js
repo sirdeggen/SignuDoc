@@ -5,6 +5,7 @@ import { fletcher } from '../lib/fletcher'
 export default function HCPage() {
     const router = useRouter()
     const [authToken, setHcToken] = useState('')
+    const [dataToBroadcast, setDataToBroadcast] = useState('')
     const [mostRecentResponse, setMostRecentResponse] = useState({})
 
     useEffect(() => {
@@ -29,6 +30,7 @@ export default function HCPage() {
                 {
                     handle: handle?.current?.value || 'jadwahab',
                     satoshis: 1000,
+                    dataToBroadcast
                 },
                 authToken
             )
@@ -37,6 +39,41 @@ export default function HCPage() {
             console.log({ error })
         }
     }
+
+    async function encrypt() {
+        try {
+            const { publicData } = await fletcher(
+                '/api/encrypt',
+                {
+                    message: "Guten Tag!"
+                },
+                authToken
+            )
+            setDataToBroadcast(publicData)
+            setMostRecentResponse({ publicData })
+        } catch (error) {
+            console.log({ error })
+        }
+    }
+
+    async function decrypt() {
+        try {
+            const encryptedData = Buffer.from('42494531027361f3ac96b7993d0382f6136b84d64aaaea094113c2608337d29cc66172bc936c6c59734908f7d285aab623a952518e7e6e930c2ed14c92b811e739be860780afa655ba600095a5780dbece9051b943', 'hex').toString('base64')
+            console.log(encryptedData)
+            const { secretMessage } = await fletcher(
+                '/api/decrypt',
+                {
+                    encryptedData
+                },
+                authToken
+            )
+            setMostRecentResponse({ secretMessage })
+        } catch (error) {
+            console.log({ error })
+        }
+    }
+
+
 
     async function logout() {
         try {
@@ -58,6 +95,12 @@ export default function HCPage() {
                 </li>
                 <li>
                     <input type={'text'} placeholder={'jadwahab'} ref={handle}/><button onClick={payment}>Pay Someone</button>
+                </li>
+                <li>
+                    <button onClick={encrypt}>Encrypt</button>
+                </li>
+                <li>
+                    <button onClick={decrypt}>Decrypt</button>
                 </li>
                 <li>
                     <button onClick={logout}>Logout</button>

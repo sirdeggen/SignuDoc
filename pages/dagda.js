@@ -13,7 +13,7 @@ export default function HomePage() {
         const response = await dagda.createAuthority({
             profile: {
                 name: 'WAD',
-                phone: '+47 0000 987 654'``,
+                phone: '+47 0000 987 654',
                 email: 'example1242134234524@gmail.com',
             },
         })

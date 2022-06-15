@@ -1,8 +1,12 @@
 import nextConnect from 'next-connect'
 const { HandCashConnect } = require('@handcash/handcash-connect')
+const ECIES = require('electrum-ecies')
 
 const makePayment = async (req, res) => {
     try {
+
+        console.log('decrypt')
+
         const handCashConnect = new HandCashConnect({
             appId: process.env.HCC_APP_ID,
             appSecret: process.env.HCC_APP_SECRET,
@@ -10,15 +14,17 @@ const makePayment = async (req, res) => {
 
         const handcash = handCashConnect.getAccountFromAuthToken(req.body.authToken)
 
-        const paymentParameters = {
-            description: 'Prost! 🍺',
-            payments: [{ to: 'deggen@signavera.com', currencyCode: 'EUR', amount: 0.01 }],
-            attachment: { format: 'base64', value: req.body.dataToBroadcast }
-        }
+        const message = req.body.encryptedData
 
-        const response = await handcash.wallet.pay(paymentParameters)
-        console.log(response)
-        return res.json({ response })
+        console.log(message)
+        const { privateKey } = await handcash.profile.getEncryptionKeypair()
+
+        console.log(privateKey)
+        const secret = ECIES.decrypt(message, privateKey)
+        console.log(secret)
+        const secretMessage = secret.toString()
+        console.log({ secretMessage })
+        return res.json({ secretMessage })
     } catch (error) {
         return res.json({ error })
     }

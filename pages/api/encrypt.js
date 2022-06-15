@@ -1,5 +1,6 @@
 import nextConnect from 'next-connect'
 const { HandCashConnect } = require('@handcash/handcash-connect')
+const ECIES = require('electrum-ecies')
 
 const makePayment = async (req, res) => {
     try {
@@ -10,15 +11,12 @@ const makePayment = async (req, res) => {
 
         const handcash = handCashConnect.getAccountFromAuthToken(req.body.authToken)
 
-        const paymentParameters = {
-            description: 'Prost! 🍺',
-            payments: [{ to: 'deggen@signavera.com', currencyCode: 'EUR', amount: 0.01 }],
-            attachment: { format: 'base64', value: req.body.dataToBroadcast }
-        }
+        const message = req.body?.message || 'nothing to say really'
 
-        const response = await handcash.wallet.pay(paymentParameters)
-        console.log(response)
-        return res.json({ response })
+        const { publicKey } = await handcash.profile.getEncryptionKeypair()
+
+        const publicData = ECIES.encrypt(message, publicKey)
+        return res.json({ publicData })
     } catch (error) {
         return res.json({ error })
     }

@@ -9,6 +9,7 @@
         "@handcash/handcash-connect": "^0.4.2",
         "@hapi/iron": "6.0.0",
         "cookie": "0.4.0",
+        "electrum-ecies": "^1.1.8",
         "next": "latest",
         "next-connect": "^0.6.1",
         "openspv": "^3.0.29",
