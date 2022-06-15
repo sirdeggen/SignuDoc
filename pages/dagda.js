@@ -6,15 +6,14 @@ export default function HomePage() {
     const [authorityID, setAuthorityID] = useState({})
     const dagda = new DagdaClient({
         userID: 'f325f5b46f3f5222958de70655b7364bd1da1d90763993f884c847cb2d6e8cb7',
-        bearerToken: 'dff0306cc60bb15418b251e6f69b44277526118f02ca3712d2b701af02db1ca5',
-        testnet: true
+        bearerToken: 'dff0306cc60bb15418b251e6f69b44277526118f02ca3712d2b701af02db1ca5'
     })
 
     const authority = async () => {
         const response = await dagda.createAuthority({
             profile: {
                 name: 'WAD',
-                phone: '+47 0000 987 654',
+                phone: '+47 0000 987 654'``,
                 email: 'example1242134234524@gmail.com',
             },
         })
