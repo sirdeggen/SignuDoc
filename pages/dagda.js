@@ -4,6 +4,7 @@ import {useState} from 'react'
 export default function HomePage() {
     const [mostRecentResponse, setMostRecentResponse] = useState({})
     const dagda = new DagdaClient({
+        testnet: true,
         userID: 'f7d2aac36b88717878665bf43e9df1a7d3d6d87510f492f6684c7e41c40dd00d',
         bearerToken: '2c30391eac568162be3ff7fbc4117d5bb0ba0b30b68e03f00f3ed5ba147abd75',
     })
