@@ -1,0 +1,7 @@
+# Ignore artifacts:
+.next
+.vscode
+coverage
+node_modules
+# Ignore all HTML files:
+*.html
