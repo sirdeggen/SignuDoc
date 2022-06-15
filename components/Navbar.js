@@ -11,8 +11,13 @@ export default function Navbar() {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/mb">
+                        <Link href="/mb.html">
                             <a>MoneyButton</a>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/dagda">
+                            <a>Dagda</a>
                         </Link>
                     </li>
                 </ul>
