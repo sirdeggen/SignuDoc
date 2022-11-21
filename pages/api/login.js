@@ -1,11 +1,15 @@
 import nextConnect from 'next-connect'
-import auth from '../../middleware/auth'
-import passport from '../../lib/passport'
+import { withSessionApiRoute } from '/middleware/session'
 
 const handler = nextConnect()
 
-handler.use(auth).post(passport.authenticate('local'), (req, res) => {
-    res.json({ user: req.user })
-})
+async function loginWithHandcash(req, res) {
+    try {
+        res.json({ user: req.user })
+    } catch (error) {
+        console.log({ error })
+    }
+}
+handler.use(withSessionApiRoute).post(loginWithHandcash)
 
 export default handler

@@ -4,7 +4,6 @@ const ECIES = require('electrum-ecies')
 
 const makePayment = async (req, res) => {
     try {
-
         console.log('decrypt')
 
         const handCashConnect = new HandCashConnect({

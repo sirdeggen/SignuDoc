@@ -10,6 +10,7 @@
         "@hapi/iron": "6.0.0",
         "cookie": "0.4.0",
         "electrum-ecies": "^1.1.8",
+        "iron-session": "^6.3.1",
         "next": "latest",
         "next-connect": "^0.6.1",
         "openspv": "^3.0.29",

@@ -29,7 +29,7 @@ export default function HCPage() {
                 '/api/payment',
                 {
                     handle: handle?.current?.value || 'jadwahab',
-                    satoshis: 1000,
+                    satoshis: 1,
                     dataToBroadcast
                 },
                 authToken
