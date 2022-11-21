@@ -2,6 +2,7 @@ import { useDropzone } from 'react-dropzone'
 import { createRef, useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { httpsClient } from '/lib/.'
+import { withSessionSsr } from '../middleware/session'
 
 const dropZoneStyle = {
     height: '100%',
@@ -12,7 +13,14 @@ const dropZoneStyle = {
     textAlign: 'center',
 }
 
-export default function HomePage() {
+const loginPanel = {
+    textAlign: 'center',
+    height: '20vh',
+    width: '100%',
+    padding: 24,
+}
+
+export default function HomePage({ loggedIn = false }) {
     const onDrop = useCallback(acceptedFiles => {
         // Do something with the files
         console.log({ acceptedFiles })
@@ -92,25 +100,26 @@ export default function HomePage() {
         }
     }
 
-    async function logout() {
-        try {
-            localStorage.removeItem('HC_TOKEN')
-            setMostRecentResponse({ loggedout: 'true' })
-        } catch (error) {
-            console.log({ error })
-        }
-    }
-
     const handle = createRef()
 
     return (
         <>
             <h1>SignuDoc</h1>
-            <button onClick={redirect}>Login</button>
-            <div {...getRootProps()} style={{ ...dropZoneStyle, background: isDragActive ? '#232323' : 'transparent' }}>
+            { loggedIn && <div {...getRootProps()} style={{ ...dropZoneStyle, background: isDragActive ? '#232323' : 'transparent' }}>
                 <input {...getInputProps()} />
                 <p>Drag n' Drop a file here</p>
+            </div> }
+            <div style={loginPanel}>
+                {loggedIn ? <button onClick={() => router.push('/logout')}>LogOut</button> : <button onClick={redirect}>Login</button>}
             </div>
         </>
     )
 }
+
+export const getServerSideProps = withSessionSsr(async function getServerSideProps({ req }) {
+    return {
+        props: {
+            loggedIn: !!req?.session?.authToken,
+        },
+    }
+})

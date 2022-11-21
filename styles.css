@@ -62,3 +62,12 @@ input {
     margin: 0.5rem 0;
     text-align: center;
 }
+
+button {
+    padding: 10px 30px;
+    border: none;
+    box-shadow: rgba(0,0,0,0.2) 0px 2px 4px 0px;
+    cursor: pointer;
+    background-color: #506997;
+    color: white
+}
