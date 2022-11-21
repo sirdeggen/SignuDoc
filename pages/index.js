@@ -3,6 +3,7 @@ import { createRef, useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { httpsClient } from '/lib/.'
 import { withSessionSsr } from '../middleware/session'
+import { Address, Bn, Hash, PrivKey } from 'openspv'
 
 const dropZoneStyle = {
     height: '100%',
@@ -69,14 +70,11 @@ export default function HomePage({ loggedIn = false }) {
 
     async function sign() {
         try {
-            const response = await httpsClient(
-                '/api/payment',
-                {
-                    handle: handle?.current?.value || 'jadwahab',
-                    satoshis: 1,
-                    dataToBroadcast,
-                }
-            )
+            const response = await httpsClient('/api/payment', {
+                handle: handle?.current?.value || 'jadwahab',
+                satoshis: 1,
+                dataToBroadcast,
+            })
             console.log({ response })
         } catch (error) {
             console.log({ error })
@@ -97,8 +95,13 @@ export default function HomePage({ loggedIn = false }) {
 
     async function createSignatureRequest() {
         try {
+            const privKey = PrivKey.fromBn(
+                Bn.fromBuffer(Hash.sha256Sha256(Buffer.from(JSON.stringify(dataToBroadcast))))
+            )
+            const address = Address.fromPrivKey(privKey).toString()
+            console.log({ address })
             const response = await httpsClient('/api/createSigReq', {
-                dataToBroadcast,
+                address,
             })
             console.log({ response })
         } catch (error) {

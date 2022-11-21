@@ -1,6 +1,7 @@
 import nextConnect from 'next-connect'
 import assert from 'assert'
 import { httpsClientWithHeaders } from '../../lib'
+import {withSessionApiRoute} from '../../middleware/session'
 const { HandCashConnect } = require('@handcash/handcash-connect')
 
 const headers = {
@@ -12,18 +13,13 @@ const headers = {
 
 const createSignatureRequest = async (req, res) => {
     try {
-        assert(!!req.session?.authToken)
-        const handCashConnect = new HandCashConnect({
-            appId: process.env.HCC_APP_ID,
-            appSecret: process.env.HCC_APP_SECRET,
-        })
-
+        assert(!!req?.session?.authToken)
         const paymentRequest = {
             product: {
                 name: 'Signoff',
                 description: 'Requesting Signature Across Hash of Documents',
             },
-            receivers: [{ sendAmount: 1, currencyCode: 'SAT', destination: 'deggen' }],
+            receivers: [{ sendAmount: 1000, currencyCode: 'SAT', destination: req.body?.address || 'deggen' }],
             requestedUserData: ['paymail'],
             notifications: {
                 email: process.env.NOTIFICATIONS_EMAIL,
@@ -47,5 +43,5 @@ const createSignatureRequest = async (req, res) => {
 
 const handler = nextConnect()
 
-handler.post(makePayment)
+handler.post(withSessionApiRoute(createSignatureRequest))
 export default handler
