@@ -1,18 +1,13 @@
 import nextConnect from 'next-connect'
 import assert from 'assert'
-import {httpsClientWithHeaders} from '../../lib'
+import { httpsClientWithHeaders } from '../../lib'
 const { HandCashConnect } = require('@handcash/handcash-connect')
 
-const options = {
-    method: 'POST',
-    url: 'https://cloud.handcash.io/v2/paymentRequests',
-    headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'app-secret': 'your-app-secret',
-        'app-id': 'your-app-id',
-    },
-    data: ,
+const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'app-secret': process.env.HCC_APP_SECRET,
+    'app-id': process.env.HCC_APP_ID,
 }
 
 const createSignatureRequest = async (req, res) => {
@@ -28,22 +23,20 @@ const createSignatureRequest = async (req, res) => {
                 name: 'Signoff',
                 description: 'Requesting Signature Across Hash of Documents',
             },
-            receivers: [
-                { sendAmount: 1, currencyCode: 'SAT', destination: 'deggen' },
-            ],
+            receivers: [{ sendAmount: 1, currencyCode: 'SAT', destination: 'deggen' }],
             requestedUserData: ['paymail'],
             notifications: {
-                // webhook: {
-                //     customParameters: { gameId: '199491921' },
-                //     webhookUrl: 'https://app.hastearcade.com/wehbooks/handcash',
-                // },
-                email: 'signed@deggen.com',
+                email: process.env.NOTIFICATIONS_EMAIL,
             },
             expirationType: 'never',
-            redirectUrl: 'https://app.hastearcade.com/games/ec04e9ca-71b6-4fb2-abb0-b6a2da072fb9',
+            redirectUrl: 'https://signudoc.vercel.app/signed',
         }
 
-        const response = await httpsClientWithHeaders('https://cloud.handcash.io/v2/paymentRequests', options.data, options.headers)
+        const response = await httpsClientWithHeaders(
+            'https://cloud.handcash.io/v2/paymentRequests',
+            paymentRequest,
+            headers
+        )
 
         console.log(response)
         return res.json({ response })
