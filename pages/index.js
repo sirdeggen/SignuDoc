@@ -1,8 +1,5 @@
 import { useDropzone } from 'react-dropzone'
-import { createRef, useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { httpsClient } from '/lib/.'
-import { withSessionSsr } from '../middleware/session'
+import { useCallback, useEffect, useState } from 'react'
 import { Address, Bn, Hash, PrivKey } from 'openspv'
 
 const dropZoneStyle = {
@@ -12,13 +9,6 @@ const dropZoneStyle = {
     minHeight: '30vh',
     padding: 24,
     textAlign: 'center',
-}
-
-const loginPanel = {
-    textAlign: 'center',
-    height: '20vh',
-    width: '100%',
-    padding: 24,
 }
 
 const filterUniqueHash = documents => {
@@ -51,35 +41,12 @@ export default function HomePage({ loggedIn = false }) {
         }
     }, [])
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
-
-    const router = useRouter()
     const [dataToBroadcast, setDataToBroadcast] = useState([])
+    const [requestId, setRequestId] = useState('')
 
     useEffect(() => {
         console.log({ dataToBroadcast })
     }, [dataToBroadcast])
-
-    async function redirect() {
-        try {
-            const { redirectionLoginUrl } = await httpsClient('/api/getRedirectionUrl')
-            await router.push(redirectionLoginUrl)
-        } catch (error) {
-            console.log({ error })
-        }
-    }
-
-    async function sign() {
-        try {
-            const response = await httpsClient('/api/payment', {
-                handle: handle?.current?.value || 'jadwahab',
-                satoshis: 1,
-                dataToBroadcast,
-            })
-            console.log({ response })
-        } catch (error) {
-            console.log({ error })
-        }
-    }
 
     async function hashFileData(file) {
         try {
@@ -98,18 +65,12 @@ export default function HomePage({ loggedIn = false }) {
             const privKey = PrivKey.fromBn(
                 Bn.fromBuffer(Hash.sha256Sha256(Buffer.from(JSON.stringify(dataToBroadcast))))
             )
-            const address = Address.fromPrivKey(privKey).toString()
-            console.log({ address })
-            const response = await httpsClient('/api/createSigReq', {
-                address,
-            })
-            console.log({ response })
+            const rId = Address.fromPrivKey(privKey).toString()
+            setRequestId(rId)
         } catch (error) {
             console.log({ error })
         }
     }
-
-    const handle = createRef()
 
     return (
         <>
@@ -120,35 +81,17 @@ export default function HomePage({ loggedIn = false }) {
                     {dataToBroadcast.map((document, index) => (
                         <p key={index}>{document.fileName}</p>
                     ))}
-                    <div style={{ padding: 24 }}>
+                    { requestId === '' ? <div style={{ padding: 24 }}>
                         <button onClick={createSignatureRequest}>Create Signature Request</button>
-                    </div>
+                    </div> : <div style={{ padding: 24 }}>
+                        Signoff request link: {`https://signudoc.vercel.app/sign/${requestId}`}
+                    </div>}
                 </>
             )}
-            {loggedIn && (
-                <div
-                    {...getRootProps()}
-                    style={{ ...dropZoneStyle, background: isDragActive ? '#232323' : 'transparent' }}
-                >
-                    <input {...getInputProps()} />
-                    <p>Add files</p>
-                </div>
-            )}
-            <div style={loginPanel}>
-                {loggedIn ? (
-                    <button onClick={() => router.push('/logout')}>LogOut</button>
-                ) : (
-                    <button onClick={redirect}>Login</button>
-                )}
+            <div {...getRootProps()} style={{ ...dropZoneStyle, background: isDragActive ? '#232323' : 'transparent' }}>
+                <input {...getInputProps()} />
+                <p>Add files</p>
             </div>
         </>
     )
 }
-
-export const getServerSideProps = withSessionSsr(async function getServerSideProps({ req }) {
-    return {
-        props: {
-            loggedIn: !!req?.session?.authToken,
-        },
-    }
-})

@@ -13,13 +13,13 @@ const headers = {
 
 const createSignatureRequest = async (req, res) => {
     try {
-        assert(!!req?.session?.authToken)
+        const requestId = req.body?.requestId || 'deggen'
         const paymentRequest = {
             product: {
-                name: 'Signoff',
+                name: 'Signed ' + requestId.slice(1,18),
                 description: 'Requesting Signature Across Hash of Documents',
             },
-            receivers: [{ sendAmount: 1000, currencyCode: 'SAT', destination: req.body?.address || 'deggen' }],
+            receivers: [{ sendAmount: 500, currencyCode: 'SAT', destination: requestId }],
             requestedUserData: ['paymail'],
             notifications: {
                 email: process.env.NOTIFICATIONS_EMAIL,
@@ -34,10 +34,10 @@ const createSignatureRequest = async (req, res) => {
             headers
         )
 
-        console.log(response)
-        return res.json({ response })
+        return res.json(response)
     } catch (error) {
-        return res.json({ error })
+        console.log({ error })
+        return res.status(400).json({ error })
     }
 }
 
