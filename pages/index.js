@@ -1,15 +1,7 @@
 import { useDropzone } from 'react-dropzone'
+import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import { Address, Bn, Hash, PrivKey } from 'openspv'
-
-const dropZoneStyle = {
-    height: '100%',
-    width: '100%',
-    border: '2px dashed black',
-    minHeight: '30vh',
-    padding: 24,
-    textAlign: 'center',
-}
 
 const filterUniqueHash = documents => {
     const uniqueHashes = []
@@ -48,6 +40,10 @@ export default function HomePage({ loggedIn = false }) {
         console.log({ dataToBroadcast })
     }, [dataToBroadcast])
 
+    function clear() {
+        setDataToBroadcast([])
+    }
+
     async function hashFileData(file) {
         try {
             const content = await file.arrayBuffer()
@@ -83,14 +79,15 @@ export default function HomePage({ loggedIn = false }) {
                     ))}
                     { requestId === '' ? <div style={{ padding: 24 }}>
                         <button onClick={createSignatureRequest}>Create Signature Request</button>
+                        <button className={'clear'} onClick={clear}>Start Over</button>
                     </div> : <div style={{ padding: 24 }}>
                         Signoff request link: {`https://signudoc.vercel.app/sign/${requestId}`}
                     </div>}
                 </>
             )}
-            <div {...getRootProps()} style={{ ...dropZoneStyle, background: isDragActive ? '#232323' : 'transparent' }}>
+            <div {...getRootProps()} className={'dropZone'} style={{ background: isDragActive ? '#232323' : 'rgba(255,255,255,0.5)' }}>
                 <input {...getInputProps()} />
-                <p>Add files</p>
+                <Image style={{ opacity: 0.5 }} src={'/fileIcon.png'} width={100} height={100} />
             </div>
         </>
     )

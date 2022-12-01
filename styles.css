@@ -8,6 +8,8 @@ body {
     color: #333;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, Noto Sans, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    background: linear-gradient(0deg, rgb(169, 222, 237), rgb(255,255,255));
+    height: 100vh;
 }
 .container {
     max-width: 42rem;
@@ -58,7 +60,7 @@ input {
     text-decoration: none;
 }
 .error {
-    color: brown;
+    color: darkred;
     margin: 0.5rem 0;
     text-align: center;
 }
@@ -70,4 +72,18 @@ button {
     cursor: pointer;
     background-color: #506997;
     color: white
+}
+
+.clear {
+    float: right;
+    background-color: darkred;
+}
+
+.dropZone {
+    height: 100%;
+    width: 100%;
+    border: 2px dashed rgba(0,0,0,0.5);
+    min-height: 30vh;
+    padding: 24px;
+    text-align: center;
 }
