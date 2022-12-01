@@ -16,7 +16,7 @@ const createSignatureRequest = async (req, res) => {
         const requestId = req.body?.requestId || 'deggen'
         const paymentRequest = {
             product: {
-                name: 'Signed ' + requestId.slice(1,18),
+                name: 'SignuDoc ' + requestId.slice(1,16),
                 description: 'Requesting Signature Across Hash of Documents',
             },
             receivers: [{ sendAmount: 500, currencyCode: 'SAT', destination: requestId }],
