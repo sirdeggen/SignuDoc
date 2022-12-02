@@ -30,7 +30,8 @@ export default function Sign() {
             <div className={'centerBlock'}>
                 {!qrCode && (
                     <>
-                        <h3>You are attempting to approve: {requestId}</h3>
+                    <h3>You are attempting to approve:</h3>
+                    <h5>{requestId}</h5>
                         <p>To approve the files you were sent along with this link, add them above.</p>
                     </>
                 )}

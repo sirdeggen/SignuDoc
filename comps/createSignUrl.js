@@ -1,12 +1,13 @@
 import { Address, Bn, Hash, PrivKey } from 'openspv'
 import { useCallback, useState } from 'react'
+import { urlPrefix } from '/lib'
 
 const CreateSignUrl = ({ requestId = '', setRequestId, dataToBroadcast = [] }) => {
     const [copied, setCopied] = useState(false)
 
     const copy = useCallback(() => {
         if (!!navigator?.clipboard) {
-            navigator.clipboard.writeText(`https://signudoc.vercel.app/sign/${requestId}`)
+            navigator.clipboard.writeText(urlPrefix + requestId)
             setCopied(true)
             setTimeout(() => {
                 setCopied(false)
@@ -31,9 +32,7 @@ const CreateSignUrl = ({ requestId = '', setRequestId, dataToBroadcast = [] }) =
                     ) : (
                         <div style={{ padding: 24 }} onClick={copy}>
                             <p>Send files to the signatory along with this link:</p>
-                            <span className={'shareLink'}>
-                                {copied ? 'copied' : `https://signudoc.vercel.app/sign/${requestId}`}
-                            </span>
+                            <span className={'shareLink'}>{copied ? 'copied' : urlPrefix + requestId}</span>
                             <p>Once they've checked the files, they should drop them at the link you shared to sign.</p>
                         </div>
                     )}

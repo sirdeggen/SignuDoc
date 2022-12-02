@@ -1,8 +1,6 @@
 import nextConnect from 'next-connect'
-import assert from 'assert'
-import { httpsClientWithHeaders } from '../../lib'
-import {withSessionApiRoute} from '../../middleware/session'
-const { HandCashConnect } = require('@handcash/handcash-connect')
+import { httpsClientWithHeaders, siteUrl } from '/lib'
+import { withSessionApiRoute } from '/middleware/session'
 
 const headers = {
     Accept: 'application/json',
@@ -16,7 +14,7 @@ const createSignatureRequest = async (req, res) => {
         const requestId = req.body?.requestId || 'deggen'
         const paymentRequest = {
             product: {
-                name: 'SignuDoc ' + requestId.slice(1,16),
+                name: 'SignuDoc ' + requestId.slice(1, 16),
                 description: 'Requesting Signature Across Hash of Documents',
             },
             receivers: [{ sendAmount: 500, currencyCode: 'SAT', destination: requestId }],
@@ -25,7 +23,7 @@ const createSignatureRequest = async (req, res) => {
                 email: process.env.NOTIFICATIONS_EMAIL,
             },
             expirationType: 'never',
-            redirectUrl: 'https://signudoc.vercel.app/signed',
+            redirectUrl: siteUrl + '/signed',
         }
 
         const response = await httpsClientWithHeaders(
