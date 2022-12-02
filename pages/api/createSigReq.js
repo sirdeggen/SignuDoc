@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect'
-import { httpsClientWithHeaders, siteUrl } from '/lib'
+import { httpsClientWithHeaders, siteFQDN } from '/lib'
 import { withSessionApiRoute } from '/middleware/session'
 
 const headers = {
@@ -23,7 +23,7 @@ const createSignatureRequest = async (req, res) => {
                 email: process.env.NOTIFICATIONS_EMAIL,
             },
             expirationType: 'never',
-            redirectUrl: siteUrl + '/signed',
+            redirectUrl: siteFQDN + '/signed',
         }
 
         const response = await httpsClientWithHeaders(
