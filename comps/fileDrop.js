@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { useCallback } from 'react'
+import fileIcon from '../public/fileIcon.png'
 
 async function hashFileData(file) {
     try {
@@ -70,7 +71,7 @@ const FileDrop = ({
                     style={{ background: isDragActive ? '#232323' : 'rgba(0,0,0,0.25)' }}
                 >
                     <input {...getInputProps()} />
-                    <Image style={{ opacity: 0.5 }} src={'/fileIcon.png'} width={50} height={50} />
+                    <Image style={{ opacity: 0.5 }} src={fileIcon} width={50} height={50} priority />
                 </div>
             )}
             {dataToBroadcast?.length > 0 && (
